@@ -4,6 +4,7 @@ import { initialData } from '../../database/products';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { ProductSlideshow } from '../../components/products/ProductSlideshow';
 import { ItemCounter } from '../../components/ui/ItemCounter';
+import { SizeSelector } from '../../components/products/SizeSelector';
 
 const product = initialData.products[0]
 
@@ -26,6 +27,10 @@ const ProductPage = () => {
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'  >Cantidad</Typography>
               <ItemCounter />
+              <SizeSelector
+                // selectedSize={product.sizes[0]}
+                sizes={product.sizes}
+              />
             </Box>
             {/* Agregar al carrito */}
             <Button color='secondary' className='circular-btn' >
