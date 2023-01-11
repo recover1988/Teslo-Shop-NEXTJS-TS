@@ -16,7 +16,7 @@ export const Navbar = () => {
                 {/* TODO: flex */}
                 <Box flex={1} />
                 {/* MaterialUi el Box>sx nos permite tener el display condicional para pantallas pequeñas xs:'none' para pantallas mas grandes ms:'block'*/}
-                <Box sx={{ display: { xs: 'none', ms: 'block' } }} >
+                <Box sx={{ display: { xs: 'none', sm: 'block' } }} >
                     <NextLink href='/category/men' passHref legacyBehavior >
                         <Link>
                             <Button>Hombres</Button>
