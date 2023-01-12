@@ -2,9 +2,10 @@ import { Grid, Link, Typography, CardActionArea, CardMedia, Box, Button } from '
 import { initialData } from "../../database/products"
 import NextLink from 'next/link'
 import { ItemCounter } from '../ui/ItemCounter';
+import { FC } from 'react';
 
 interface Props {
-
+    editable?: boolean
 }
 
 const productsInCart = [
@@ -13,7 +14,7 @@ const productsInCart = [
     initialData.products[2],
 ]
 
-export const CartList = () => {
+export const CartList: FC<Props> = ({ editable = false }) => {
 
 
 
@@ -28,7 +29,7 @@ export const CartList = () => {
                                 <Link>
                                     <CardActionArea>
                                         <CardMedia
-                                            image={`products/${product.images[0]}`}
+                                            image={`/products/${product.images[0]}`}
                                             component='img'
                                             sx={{ borderRadius: '5px' }}
                                         />
@@ -40,16 +41,24 @@ export const CartList = () => {
                             <Box display='flex' flexDirection='column' >
                                 <Typography variant='body1' >{product.title}</Typography>
                                 <Typography variant='body1' >Talla: <strong>M</strong></Typography>
-                                {/* Condicional */}
-                                <ItemCounter />
+                                {
+                                    editable
+                                        ? <ItemCounter />
+                                        : <Typography variant='h4' >3 items</Typography>
+                                }
+
                             </Box>
                         </Grid>
                         <Grid item xs={5} display='flex' alignItems='center' flexDirection='column' >
                             <Typography variant='subtitle1' >{`$${product.price}`}</Typography>
-                            {/* Editable */}
-                            <Button variant='text' color='secondary' >
-                                Remover
-                            </Button>
+                            {
+                                editable && (
+                                    <Button variant='text' color='secondary' >
+                                        Remover
+                                    </Button>
+                                )
+                            }
+
                         </Grid>
                     </Grid>
 
