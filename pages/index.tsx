@@ -20,7 +20,5 @@ export default function HomePage() {
           : <ProductList products={products} />
       }
     </ShopLayout>
-
-
   )
 }

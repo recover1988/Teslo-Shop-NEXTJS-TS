@@ -8,7 +8,7 @@ interface Props {
 
 export const ItemCounter: FC<Props> = () => {
     return (
-        <Box>
+        <Box display='flex' flexDirection='row' alignItems='center' justifyContent='left' >
             <IconButton>
                 <RemoveCircleOutline />
             </IconButton>
