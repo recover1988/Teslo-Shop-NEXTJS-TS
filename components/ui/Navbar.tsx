@@ -3,6 +3,8 @@ import NextLink from 'next/link'
 
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
+import { UIContext } from '../../context'
 
 export const Navbar = () => {
 
@@ -12,6 +14,8 @@ export const Navbar = () => {
     // }
     // <Button color={isIn('men') ? 'primary' : 'info'} >Hombres</Button>
     const { asPath } = useRouter()
+
+    const { isMenuOpen, toggleSideMenu } = useContext(UIContext)
 
     return (
         <AppBar>
@@ -59,7 +63,7 @@ export const Navbar = () => {
                     </Link>
                 </NextLink>
 
-                <Button>
+                <Button onClick={toggleSideMenu} >
                     Menú
                 </Button>
 
