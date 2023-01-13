@@ -2,7 +2,7 @@ import React from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 
-export const AddressPage = () => {
+const AddressPage = () => {
     return (
         <ShopLayout title={'Direccion'} pageDescription={'Confirmar direccion del destino'} >
             <Typography variant='h1' component='h1' >Dirección</Typography>
@@ -55,3 +55,4 @@ export const AddressPage = () => {
         </ShopLayout>
     )
 }
+export default AddressPage;
