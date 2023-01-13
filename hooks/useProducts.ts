@@ -8,6 +8,8 @@ import { IProduct } from '../interfaces'
 export const useProducts = (url: string, config: SWRConfiguration = {}) => {
 
     // const fetcher = (...args: [key: string]) => fetch(...args).then(res => res.json())
+    // el fetcher se instala en _app para que se pueda proveer en toda la aplicacion
+    
     const { data, error } = useSWR<IProduct[]>(`/api${url}`, config)
 
     return {
