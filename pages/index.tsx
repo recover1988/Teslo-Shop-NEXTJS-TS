@@ -2,6 +2,7 @@ import { ShopLayout } from '../components/layouts'
 import { Typography } from '@mui/material'
 import { ProductList } from '../components/products/ProductList';
 import { useProducts } from '../hooks';
+import { FullScreenLoading } from '../components/ui';
 
 
 
@@ -15,7 +16,7 @@ export default function HomePage() {
       <Typography variant='h2' sx={{ mb: 1 }} >Todos los productos</Typography>
       {
         isLoading
-          ? <h1>Cargando</h1>
+          ? <FullScreenLoading />
           : <ProductList products={products} />
       }
     </ShopLayout>
