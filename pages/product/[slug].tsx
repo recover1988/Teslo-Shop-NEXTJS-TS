@@ -120,7 +120,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 //- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { slug } = params as { slug: string }
+  const { slug =''} = params as { slug: string }
   const product = await dbProducts.getProductBySlug(slug)
 
   if (!product) {
@@ -135,7 +135,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       product
     },
-    revalidate: 86400,
+    revalidate: 86400, // o se puede poner 60 * 60 * 24
   }
 };
 
