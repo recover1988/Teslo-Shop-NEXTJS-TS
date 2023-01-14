@@ -22,7 +22,7 @@ const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
 
             {
                 foundProducts
-                    ? <Typography variant='h2' sx={{ mb: 1 }} >Termino: {query}</Typography>
+                    ? <Typography variant='h2' sx={{ mb: 1 }} textTransform='capitalize' >Termino: {query}</Typography>
                     : (
                         <Box display='flex' >
                             <Typography variant='h2' sx={{ mb: 1 }} >No encontramos ningún producto</Typography>
@@ -61,6 +61,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
     //TODO: retornar otros productos
     if (!foundProducts) {
+        // aca se puede cambiar products y buscar por alguna cosa que el usuario tenga guardado en la cookie
         products = await dbProducts.getAllProducts()
     }
 
