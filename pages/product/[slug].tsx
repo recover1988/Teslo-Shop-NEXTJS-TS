@@ -51,11 +51,22 @@ const ProductPage: NextPage<Props> = ({ product }) => {
               />
             </Box>
             {/* Agregar al carrito */}
-            <Button color='secondary' className='circular-btn' >
-              Agregar al Carrito
-            </Button>
 
-            {/* <Chip label='No hay disponibles' color='error' variant='outlined' /> */}
+            {
+              product.inStock > 0
+                ? (
+                  <Button color='secondary' className='circular-btn' >
+                    Agregar al Carrito
+                  </Button>
+                )
+                : (
+                  <Chip label='No hay disponibles' color='error' variant='outlined' />
+                )
+
+            }
+
+
+
 
             {/* Descripcion */}
             <Box sx={{ mt: 3 }}>
@@ -120,7 +131,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 //- The page must be pre-rendered (for SEO) and be very fast — getStaticProps generates HTML and JSON files, both of which can be cached by a CDN for performance.
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { slug =''} = params as { slug: string }
+  const { slug = '' } = params as { slug: string }
   const product = await dbProducts.getProductBySlug(slug)
 
   if (!product) {
