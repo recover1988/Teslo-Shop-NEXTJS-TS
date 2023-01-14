@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app'
-import { UIProvider } from '../context'
+import { UIProvider, CartProvider } from '../context'
 import { SWRConfig } from 'swr'
 import { lightTheme } from '../themes'
 import { CssBaseline, ThemeProvider } from '@mui/material'
@@ -13,12 +13,14 @@ export default function App({ Component, pageProps }: AppProps) {
         fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
       }}
     >
-      <UIProvider>
-        <ThemeProvider theme={lightTheme}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </UIProvider>
+      <CartProvider>
+        <UIProvider>
+          <ThemeProvider theme={lightTheme}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </UIProvider>
+      </CartProvider>
     </SWRConfig>
 
   )
