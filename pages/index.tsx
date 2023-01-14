@@ -11,7 +11,7 @@ export default function HomePage() {
   const { products, isLoading, isError } = useProducts('/products')
 
   return (
-    <ShopLayout title={'Teslo-Shop - Home'} pageDescription={'Enuentra los mejores productos en Teslo Shop'} >
+    <ShopLayout title={'Teslo-Shop - Home'} pageDescription={'Encuentra los mejores productos en Teslo Shop'} >
       <Typography variant='h1' component='h1' >Tienda</Typography>
       <Typography variant='h2' sx={{ mb: 1 }} >Todos los productos</Typography>
       {

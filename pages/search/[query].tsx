@@ -1,25 +1,77 @@
-import { ShopLayout } from '../../components/layouts'
-import { Typography } from '@mui/material'
+import { GetServerSideProps, NextPage } from 'next'
 import { ProductList } from '../../components/products/ProductList';
+import { ShopLayout } from '../../components/layouts'
+import { Box, Typography } from '@mui/material'
+import { dbProducts } from '../../database';
+import { IProduct } from '../../interfaces';
 import { useProducts } from '../../hooks';
-import { FullScreenLoading } from '../../components/ui';
+
+interface Props {
+    products: IProduct[];
+    foundProducts: boolean;
+    query: string
+}
 
 
+const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
 
-const SearchPage = () => {
-
-    const { products, isLoading, isError } = useProducts('/search/cybertruck')
 
     return (
-        <ShopLayout title={'Teslo-Shop - Search'} pageDescription={'Enuentra los mejores productos en Teslo Shop'} >
-            <Typography variant='h1' component='h1' >Buscar producto</Typography>
-            <Typography variant='h2' sx={{ mb: 1 }} >Todos los productos</Typography>
+        <ShopLayout title={'Teslo-Shop - Search'} pageDescription={'Encuentra los mejores productos en Teslo Shop'} >
+            <Typography variant='h1' component='h1' >Buscar productos</Typography>
+
             {
-                isLoading
-                    ? <FullScreenLoading />
-                    : <ProductList products={products} />
+                foundProducts
+                    ? <Typography variant='h2' sx={{ mb: 1 }} >Termino: {query}</Typography>
+                    : (
+                        <Box display='flex' >
+                            <Typography variant='h2' sx={{ mb: 1 }} >No encontramos ningún producto</Typography>
+                            <Typography variant='h2' sx={{ ml: 1 }} color='secondary' >{query}</Typography>
+                        </Box>
+                    )
             }
+
+
+
+
+            <ProductList products={products} />
+
         </ShopLayout>
     )
 }
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    const { query = '' } = params as { query: string } // your fetch function here 
+    if (query.length === 0) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: true
+            }
+        }
+    }
+
+    let products = await dbProducts.getProductsByTerm(query)
+
+    const foundProducts = products.length > 0
+
+    //TODO: retornar otros productos
+    if (!foundProducts) {
+        products = await dbProducts.getAllProducts()
+    }
+
+
+    return {
+        props: {
+            products,
+            foundProducts,
+            query
+        }
+    }
+}
+
 export default SearchPage
