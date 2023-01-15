@@ -47,8 +47,7 @@ export const CartProvider: FC<Props> = ({ children }) => {
             tax: subTotal * taxRate,
             total: subTotal * (taxRate + 1)
         }
-
-        Cookie.set('cart', JSON.stringify(state.cart))
+        
     }, [state.cart])
 
     const addProductToCart = (product: ICartProduct) => {
