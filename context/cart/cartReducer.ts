@@ -5,6 +5,7 @@ type CartActionType =
     | { type: '[Cart] - LoadCart from cookies | storage', payload: ICartProduct[] }
     | { type: '[Cart] - Update products in car', payload: ICartProduct[] }
     | { type: '[Cart] - Change cart quantity', payload: ICartProduct }
+    | { type: '[Cart] - Remover product in cart', payload: ICartProduct }
 
 export const cartReducer = (state: CartState, action: CartActionType): CartState => {
     switch (action.type) {
@@ -29,6 +30,13 @@ export const cartReducer = (state: CartState, action: CartActionType): CartState
                     return action.payload
 
                 })
+            }
+        case '[Cart] - Remover product in cart':
+            return {
+                ...state,
+                cart: state.cart.filter(product => product._id !== action.payload._id && product.size !== action.payload.size)
+                // otra forma es poner la condicion de verdadero pero negandola
+                //  !(product._id === action.payload._id && product.size === action.payload.size)
             }
         default:
             return state
