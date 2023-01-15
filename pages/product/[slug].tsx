@@ -6,8 +6,10 @@ import { NextPage, GetServerSideProps, GetStaticPaths, GetStaticProps } from 'ne
 import { ProductSlideshow } from '../../components/products/ProductSlideshow';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { SizeSelector } from '../../components/products/SizeSelector';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ISize } from '../../interfaces/products';
+import { useRouter } from 'next/router';
+import { CartContext } from '../../context';
 
 interface Props {
   product: IProduct
@@ -15,7 +17,8 @@ interface Props {
 
 const ProductPage: NextPage<Props> = ({ product }) => {
 
-
+  const router = useRouter()
+  const { addProductToCart } = useContext(CartContext)
   // Esta es una forma de traer los elementos 
   // No se recomienda hacerlo de esta manera por el SEO ya que los bots de google solo encontrarian un Cargando y no ayudaria a posiciar los productos
   //   const router = useRouter()
@@ -54,7 +57,9 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   }
 
   const onAddProduct = () => {
-    console.log(tempCartProduct)
+    if (!tempCartProduct.size) return
+    addProductToCart(tempCartProduct)
+    router.push('/cart')
   }
   return (
     <ShopLayout title={product.title} pageDescription={product.description} >
