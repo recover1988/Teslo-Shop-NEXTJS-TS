@@ -4,6 +4,7 @@ import NextLink from 'next/link'
 import { ItemCounter } from '../ui/ItemCounter';
 import { FC, useContext } from 'react';
 import { CartContext } from '../../context';
+import { ICartProduct } from '../../interfaces';
 
 interface Props {
     editable?: boolean
@@ -11,7 +12,12 @@ interface Props {
 
 export const CartList: FC<Props> = ({ editable = false }) => {
 
-    const { cart, addProductToCart } = useContext(CartContext)
+    const { cart, updateCartQuantity } = useContext(CartContext)
+
+    const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number) => {
+        product.quantity = newQuantityValue
+        updateCartQuantity(product)
+    }
 
     return (
         <>
@@ -36,13 +42,13 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                         <Grid item xs={7} >
                             <Box display='flex' flexDirection='column' >
                                 <Typography variant='body1' >{product.title}</Typography>
-                                <Typography variant='body1' >Talla: <strong>M</strong></Typography>
+                                <Typography variant='body1' >Talla: <strong>{product.size}</strong></Typography>
                                 {
                                     editable
                                         ? <ItemCounter
                                             currentValue={product.quantity}
                                             maxValue={10}
-                                            updateQuantity={() => { }}
+                                            updateQuantity={(value) => onNewCartQuantityValue(product, value)}
                                         />
                                         : (<Typography variant='h4' >{product.quantity}{product.quantity > 1 ? 'productos' : 'producto'} </Typography>)
                                 }
