@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { db } from '../../../database'
 import { User } from '../../../models'
 import bcrypt from 'bcryptjs';
+import { jwt } from '../../../utils';
 
 type Data =
     | { message: string }
@@ -47,10 +48,13 @@ const loginUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(400).json({ message: 'Correo o Contraseña no validos - Contraseña' })
     }
 
-    const { role, name } = user
+    const { role, name, _id } = user
+
+    //creando el token
+    const token = jwt.signToken(_id, email)
 
     return res.status(200).json({
-        token: '', // jwt
+        token, // jwt
         user: {
             email,
             role,
