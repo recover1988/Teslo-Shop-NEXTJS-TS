@@ -2,34 +2,30 @@ import { Grid, Link, Typography, CardActionArea, CardMedia, Box, Button } from '
 import { initialData } from "../../database/products"
 import NextLink from 'next/link'
 import { ItemCounter } from '../ui/ItemCounter';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { CartContext } from '../../context';
 
 interface Props {
     editable?: boolean
 }
 
-const productsInCart = [
-    initialData.products[0],
-    initialData.products[1],
-    initialData.products[2],
-]
-
 export const CartList: FC<Props> = ({ editable = false }) => {
 
-
+    const { cart, addProductToCart } = useContext(CartContext)
 
     return (
         <>
             {
-                productsInCart.map(product => {
-                    <Grid container key={product.slug} spacing={2} sx={{ mb: 1 }} >
+                cart.map(product => {
+                    <Grid container key={product.slug + product.size} spacing={2} sx={{ mb: 1 }} >
                         <Grid item xs={3} >
                             {/* TODO: llevar a la pagina del producto */}
-                            <NextLink href='/product/slug' passHref legacyBehavior >
+                            <NextLink href={`/product/${product.slug}`} passHref legacyBehavior >
                                 <Link>
                                     <CardActionArea>
                                         <CardMedia
-                                            image={`/products/${product.images[0]}`}
+                                            // image={`/products/${product.images[0]}`}
+                                            image={`/products/${product.image}`}
                                             component='img'
                                             sx={{ borderRadius: '5px' }}
                                         />
@@ -43,8 +39,12 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                                 <Typography variant='body1' >Talla: <strong>M</strong></Typography>
                                 {
                                     editable
-                                        ? <ItemCounter />
-                                        : <Typography variant='h4' >3 items</Typography>
+                                        ? <ItemCounter
+                                            currentValue={product.quantity}
+                                            maxValue={10}
+                                            updateQuantity={() => { }}
+                                        />
+                                        : (<Typography variant='h4' >{product.quantity}{product.quantity > 1 ? 'productos' : 'producto'} </Typography>)
                                 }
 
                             </Box>
