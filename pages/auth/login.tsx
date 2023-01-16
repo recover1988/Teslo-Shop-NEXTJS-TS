@@ -23,7 +23,7 @@ const LoginPage = () => {
             const { data } = await tesloApi.post('/user/login', { email, password })
             const { token, user } = data
         } catch (error) {
-            console.log('Erpor en las credenciales')
+            console.log('Error en las credenciales')
             setShowError(true)
             setTimeout(() => setShowError(false), 3000); // se muestra en error CHIP y 3 segundo despues se oculta
         }
