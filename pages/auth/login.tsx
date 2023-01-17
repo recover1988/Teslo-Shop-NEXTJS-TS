@@ -24,6 +24,8 @@ const LoginPage = () => {
 
     const [showError, setShowError] = useState(false)
 
+
+
     const onLoginUser = async ({ email, password }: FormData) => {
         setShowError(false)
 
@@ -35,8 +37,11 @@ const LoginPage = () => {
             return
         }
         // TODO: volver a la pantalla anterior
-        router.replace('/')
+        const destination = router.query.p?.toString() || '/'; // obtenemos el url
+        router.replace(destination)
     }
+
+
 
     return (
         <AuthLayout title={'Ingresar'} >
@@ -96,7 +101,11 @@ const LoginPage = () => {
                             </Button>
                         </Grid>
                         <Grid item xs={12} display='flex' justifyContent='end' >
-                            <NextLink href='/auth/register' passHref legacyBehavior>
+                            <NextLink
+                                href={router.query.p ? `/auth/register?p=${router.query.p}` : '/auth/register'}
+                                passHref
+                                legacyBehavior
+                            >
                                 <Link underline='always' >
                                     ¿No tienes cuenta?
                                 </Link>

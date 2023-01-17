@@ -26,6 +26,7 @@ const RegisterPage = () => {
     const [erroMessage, setErroMessage] = useState('')
 
 
+
     const onRegisterForm = async ({ email, name, password }: FormData) => {
         setShowError(false)
         const { hasError, message } = await registerUser(name, email, password)
@@ -35,8 +36,11 @@ const RegisterPage = () => {
             setTimeout(() => setShowError(false), 3000);
             return
         }
-        router.replace('/')
+        const destination = router.query.p?.toString() || '/';
+        router.replace(`${destination}`)
     }
+
+
     return (
         <AuthLayout title={'Registro'} >
             <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
@@ -109,7 +113,11 @@ const RegisterPage = () => {
                             </Button>
                         </Grid>
                         <Grid item xs={12} display='flex' justifyContent='end' >
-                            <NextLink href='/auth/login' passHref legacyBehavior>
+                            <NextLink
+                                href={router.query.p ? `/auth/login?p=${router.query.p}` : '/auth/login'}
+                                passHref
+                                legacyBehavior
+                            >
                                 <Link underline='always' >
                                     ¿Ya tienes cuenta?
                                 </Link>
