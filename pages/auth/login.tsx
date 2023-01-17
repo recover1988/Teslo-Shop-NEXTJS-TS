@@ -5,7 +5,9 @@ import { tesloApi } from '../../api';
 import { useForm } from 'react-hook-form';
 import { validations } from '../../utils';
 import NextLink from 'next/link';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { AuthContext } from '../../context';
+import { useRouter } from 'next/router';
 
 type FormData = {
     email: string,
@@ -13,22 +15,27 @@ type FormData = {
 };
 
 const LoginPage = () => {
+
+    const router = useRouter()
+
+    const { isLoggedIn, loginUser, user } = useContext(AuthContext)
+
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
     const [showError, setShowError] = useState(false)
 
     const onLoginUser = async ({ email, password }: FormData) => {
         setShowError(false)
-        try {
-            const { data } = await tesloApi.post('/user/login', { email, password })
-            const { token, user } = data
-        } catch (error) {
-            console.log('Error en las credenciales')
+
+        const isValidLogin = await loginUser(email, password)
+
+        if (!isValidLogin) {
             setShowError(true)
             setTimeout(() => setShowError(false), 3000); // se muestra en error CHIP y 3 segundo despues se oculta
+            return
         }
-
         // TODO: volver a la pantalla anterior
+        router.replace('/')
     }
 
     return (
