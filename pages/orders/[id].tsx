@@ -3,7 +3,8 @@ import { ShopLayout } from '../../components/layouts';
 import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material';
 import { CartList, OrderSummary } from '../../components/cart';
 import NextLink from 'next/link';
-import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
+import CreditCardOffOutlined from '@mui/icons-material/CreditCardOffOutlined';
+import CreditScoreOutlined from '@mui/icons-material/CreditScoreOutlined';
 
 const OrderPage = () => {
     return (
