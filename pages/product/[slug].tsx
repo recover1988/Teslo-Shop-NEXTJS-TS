@@ -1,11 +1,10 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { dbProducts } from '../../database';
 import { ICartProduct, IProduct } from '../../interfaces';
-import { ItemCounter } from '../../components/ui/ItemCounter';
-import { NextPage, GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
-import { ProductSlideshow } from '../../components/products/ProductSlideshow';
-import { ShopLayout } from '../../components/layouts/ShopLayout';
-import { SizeSelector } from '../../components/products/SizeSelector';
+import { ItemCounter } from '../../components/ui';
+import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
+import { ProductSlideshow, SizeSelector } from '../../components/products';
+import { ShopLayout } from '../../components/layouts';
 import { useContext, useState } from 'react';
 import { ISize } from '../../interfaces/products';
 import { useRouter } from 'next/router';
