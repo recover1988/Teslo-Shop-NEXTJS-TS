@@ -1,12 +1,15 @@
+import { FullScreenLoading } from '../components/ui';
+import { ProductList } from '../components/products/ProductList';
 import { ShopLayout } from '../components/layouts'
 import { Typography } from '@mui/material'
-import { ProductList } from '../components/products/ProductList';
 import { useProducts } from '../hooks';
-import { FullScreenLoading } from '../components/ui';
+
 
 
 
 export default function HomePage() {
+
+
 
   const { products, isLoading, isError } = useProducts('/products')
 

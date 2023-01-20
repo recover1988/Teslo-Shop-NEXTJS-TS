@@ -5,6 +5,7 @@ import { tesloApi } from '../../api';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 export interface AuthState {
     isLoggedIn: boolean;
@@ -26,9 +27,19 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
     const router = useRouter()
 
+    const { data, status } = useSession()
+
     useEffect(() => {
-        checkToken()
-    }, [])
+        if (status === 'authenticated') {
+
+            // dispatch({ type: '[Auth] - Login', payload: data?.user as IUser })
+        }
+    }, [status, data])
+
+
+    // useEffect(() => {
+    //     checkToken()
+    // }, [])
 
     const checkToken = async () => {
         if (!Cookies.get('token')) return
