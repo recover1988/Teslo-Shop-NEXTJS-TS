@@ -1,7 +1,14 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import Credentials from 'next-auth/providers/credentials'
-export const authOptions = {
+
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string;
+  }
+}   
+
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   // Para cambiar el orden simplemente movemos la credenciales de orden
   providers: [
@@ -25,10 +32,40 @@ export const authOptions = {
     }),
 
   ],
+  jwt: {
+
+  },
 
   // Callbacks
   callbacks: {
+    async jwt({ token, account, user }) {
 
+      if (account) {
+        token.accessToken = account.access_token
+
+        switch (account.type) {
+
+          case "oauth":
+          case "email":
+            //TODO: crear usuario o verificar si existe en mi DB  
+            break
+          case "credentials":
+            token.user = user
+            break
+
+        }
+      }
+
+      return token
+    },
+
+    async session({ session, token, user }) {
+      session.accessToken = token.accessToken as any;
+      session.user = token.user as any
+
+
+      return session
+    }
   }
 }
 export default NextAuth(authOptions)
