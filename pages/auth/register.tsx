@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { validations } from '../../utils';
 import NextLink from 'next/link';
+import { getSession, signIn } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
 
 type FormData = {
     name: string;
@@ -36,8 +38,9 @@ const RegisterPage = () => {
             setTimeout(() => setShowError(false), 3000);
             return
         }
-        const destination = router.query.p?.toString() || '/';
-        router.replace(`${destination}`)
+        // const destination = router.query.p?.toString() || '/';
+        // router.replace(`${destination}`)
+        await signIn('credentials', { email, password })
     }
 
 
@@ -128,6 +131,27 @@ const RegisterPage = () => {
             </form>
         </AuthLayout>
     )
+}
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+
+    const session = await getSession({ req })
+    const { p = '/' } = query // puede marcar error pq puede ser un arreglo por eso le pones toString()
+
+    if (session) {
+        return {
+            redirect: {
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+
+    return {
+        props: {}
+    }
 }
 
 export default RegisterPage

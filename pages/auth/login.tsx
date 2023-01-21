@@ -8,6 +8,10 @@ import NextLink from 'next/link';
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../context';
 import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
+import { getSession } from "next-auth/react";
+import { GetServerSideProps } from 'next'
+
 
 type FormData = {
     email: string,
@@ -28,17 +32,18 @@ const LoginPage = () => {
 
     const onLoginUser = async ({ email, password }: FormData) => {
         setShowError(false)
+        // const isValidLogin = await loginUser(email, password)
 
-        const isValidLogin = await loginUser(email, password)
-
-        if (!isValidLogin) {
-            setShowError(true)
-            setTimeout(() => setShowError(false), 3000); // se muestra en error CHIP y 3 segundo despues se oculta
-            return
-        }
-        // TODO: volver a la pantalla anterior
-        const destination = router.query.p?.toString() || '/'; // obtenemos el url
-        router.replace(destination)
+        // if (!isValidLogin) {
+        //     setShowError(true)
+        //     setTimeout(() => setShowError(false), 3000); // se muestra en error CHIP y 3 segundo despues se oculta
+        //     return
+        // }
+        // // TODO: volver a la pantalla anterior
+        // const destination = router.query.p?.toString() || '/'; // obtenemos el url
+        // router.replace(destination)
+        await signIn('credentials', { email, password }) // en esta funcion solo estan permitidos los provider que se definieron en la pagina de [...auth].ts
+        // este codigo de next-auth es el que realiza toda la autentificacion
     }
 
 
@@ -116,6 +121,31 @@ const LoginPage = () => {
             </form>
         </AuthLayout>
     )
+}
+
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+
+    const session = await getSession({ req })
+    const { p = '/' } = query // puede marcar error pq puede ser un arreglo por eso le pones toString()
+
+    if (session) {
+        return {
+            redirect: {
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+
+    return {
+        props: {}
+    }
 }
 
 export default LoginPage

@@ -34,11 +34,24 @@ export const authOptions: NextAuthOptions = {
     }),
 
   ],
-  jwt: {
-
+  // Custom pages
+  pages: {
+    signIn: '/auth/login',
+    newUser: '/auth/register'
   },
 
   // Callbacks
+  jwt: {
+    // secret: procces.env.JWT_SECRET_SEDD; // deprecated
+  },
+
+  session: {
+    maxAge: 2592000,  // 3o dias
+    strategy: 'jwt',
+    updateAge: 86400  //cada dia se actualiza
+  },
+
+
   callbacks: {
     async jwt({ token, account, user }) {
 
