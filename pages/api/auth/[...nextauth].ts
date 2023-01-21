@@ -50,9 +50,10 @@ export const authOptions: NextAuthOptions = {
           case "oauth":
           case "email":
             //TODO: crear usuario o verificar si existe en mi DB  
+            token.user = await dbUsers.oAuthToDbUser(user?.email || '', user?.name || '');
             break
           case "credentials":
-            token.user = user
+            token.user = user;
             break
 
         }
