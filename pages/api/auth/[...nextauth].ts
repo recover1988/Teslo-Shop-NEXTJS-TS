@@ -1,12 +1,13 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import Credentials from 'next-auth/providers/credentials'
+import { dbUsers } from "../../../database";
 
 declare module "next-auth" {
   interface Session {
     accessToken?: string;
   }
-}   
+}
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -16,13 +17,14 @@ export const authOptions: NextAuthOptions = {
     Credentials({
       name: 'Custom Login',
       credentials: {
-        email: { lable: 'Correo:', type: 'email', placeholder: 'correo@google.com' },
-        password: { lable: 'Contraseña:', type: 'password', placeholder: 'Contraseña' },
+        email: { label: 'Correo:', type: 'email', placeholder: 'correo@google.com' },
+        password: { label: 'Contraseña:', type: 'password', placeholder: 'Contraseña' },
       },
       //esta funcion tiene que devolver un null si falla o un objeto si esta todo bien
       async authorize(credentials, req) {
         //todo: validar contra base de datos
-        return null
+        // return { id:'asdsadsa' ,name: 'Juan', correo: 'juan@google.com', role: 'admin' }
+        return await dbUsers.checkUserEmailPassword(credentials!.email, credentials!.password)
       }
     }),
 
