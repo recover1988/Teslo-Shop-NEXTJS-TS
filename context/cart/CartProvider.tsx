@@ -164,7 +164,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const { data } = await tesloApi.post<IOrder>('/orders', body)
             // Todo: dispatch
-
+            dispatch({ type: '[Cart] - Order complete' })
             return {
                 hasError: false,
                 message: data._id! // confia en mi siempre viene !
