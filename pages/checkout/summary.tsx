@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ShopLayout } from '../../components/layouts';
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material';
 import { CartList, OrderSummary } from '../../components/cart';
@@ -6,10 +6,20 @@ import NextLink from 'next/link';
 import { useContext } from 'react';
 import { CartContext } from '../../context';
 import { countries } from '../../utils';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 const SummaryPage = () => {
-
+    const router = useRouter()
     const { shippingAddress, numberOfItems } = useContext(CartContext)
+
+    useEffect(() => {
+        if (!Cookies.get('firstName')) {
+            router.push('/checkout/address')
+        }
+    }, [router])
+
+
     if (!shippingAddress) { //si es nulo que muestre un fragmento y no continuee
         return <></>
     }
@@ -44,7 +54,8 @@ const SummaryPage = () => {
                             <Typography >{firstName}, {lastName}</Typography>
                             <Typography >{address}{address2 ? `, ${address2}` : ''}</Typography>
                             <Typography >{city}, {zip}</Typography>
-                            <Typography >{countries.find(c => c.code === country)?.name}</Typography>
+                            {/* <Typography >{countries.find(c => c.code === country)?.name}</Typography> */}
+                            <Typography >{country}</Typography>
                             <Typography >{phone}</Typography>
 
                             <Divider sx={{ my: 1 }} />
