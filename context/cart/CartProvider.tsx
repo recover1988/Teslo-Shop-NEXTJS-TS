@@ -4,6 +4,7 @@ import Cookie from 'js-cookie';
 
 import { ICartProduct, ShippingAddress } from '../../interfaces';
 import { CartContext, cartReducer } from './';
+import { tesloApi } from '../../api';
 
 export interface CartState {
     isLoaded: boolean;
@@ -34,7 +35,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
-    // Efecto
+    // Carga los productos desde la Cookie
     useEffect(() => {
         try {
             const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!) : []
@@ -44,9 +45,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, []);
 
-
+    // Se cargan los datos de Address desde la Cookie
     useEffect(() => {
-
         if (Cookie.get('firstName')) {
             const shippingAddress = {
                 firstName: Cookie.get('firstName') || '',
@@ -65,14 +65,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
 
 
-
+    // Crea la cookie Cart y sube los datos
     useEffect(() => {
         if (state.cart.length > 0) {
             Cookie.set('cart', JSON.stringify(state.cart))
         }
     }, [state.cart]);
 
-
+    // Actualiza el numberOfItems, Subtotal,Taxrate del summary
     useEffect(() => {
 
         const numberOfItems = state.cart.reduce((prev, current) => current.quantity + prev, 0);
@@ -141,6 +141,16 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         dispatch({ type: '[Cart] - Update Address', payload: address });
     }
 
+    const createOrder = async () => {
+        try {
+            const {data} = await tesloApi.post('/orders')
+            console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
 
     return (
         <CartContext.Provider value={{
@@ -151,6 +161,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             removeCartProduct,
             updateCartQuantity,
             updateAddress,
+
+            //Orders
+            createOrder,
         }}>
             {children}
         </CartContext.Provider>

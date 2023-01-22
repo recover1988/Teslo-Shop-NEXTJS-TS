@@ -4,6 +4,7 @@ import { IOrder } from "../interfaces";
 
 const orderSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    
     orderItems: [{
         _id     : { type: Schema.Types.ObjectId, ref: 'Product', required: true },
         title   : { type: String, required: true },
@@ -13,6 +14,7 @@ const orderSchema = new Schema({
         image   : { type: String, required: true },
         price   : { type: Number, required: true },
     }],
+
     ShippingAddress: {
         firstName   : { type: String, required: true },
         lastName    : { type: String, required: true },
@@ -31,11 +33,7 @@ const orderSchema = new Schema({
 
     isPaid  :{type: Boolean, required:true, default:false},
     paidAt  :{type: String },
-
-
-
     // name: { type: String, required: true },
-
 },
     {
         timestamps: true,
