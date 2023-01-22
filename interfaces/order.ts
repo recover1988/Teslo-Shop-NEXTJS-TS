@@ -1,4 +1,4 @@
-import { IUser } from "./";
+import { ISize, IUser } from "./";
 
 
 export interface IOrder {
@@ -22,11 +22,12 @@ export interface IOrder {
 export interface IOrderItem {
     _id: string;
     title: string;
-    size: string;
+    size: ISize;
     quantity: number;
     slug: string;
     image: string;
     price: number; // el precio puede cambiar por eso se guarda en la orden
+    gender: string
 }
 
 export interface ShippingAddress {
