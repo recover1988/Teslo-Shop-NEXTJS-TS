@@ -1,10 +1,6 @@
 # Next.Js Teslo Shop
 ```
-El proyecto es una aplicacion para organizar tareas en 3 tiempos:
-Pendiente
-En Progreso
-Terminado
-Se puede modificar las tareas, y ademas se pueden mover al estado que se desee.
+El proyecto es una aplicacion de e-commerce parecida a la de Teslo, de venta de productos de indumentaria para hombres, mujeres y niños. 
 ```
 
 
@@ -43,4 +39,6 @@ NextJS
 Mongoose
 Docker
 MaterialUI
+Next-Auth
+Paypal
 ```
