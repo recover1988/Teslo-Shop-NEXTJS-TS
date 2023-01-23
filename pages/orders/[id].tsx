@@ -2,13 +2,14 @@ import React from 'react'
 import { ShopLayout } from '../../components/layouts';
 import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material';
 import { CartList, OrderSummary } from '../../components/cart';
-import NextLink from 'next/link';
 import CreditCardOffOutlined from '@mui/icons-material/CreditCardOffOutlined';
 import CreditScoreOutlined from '@mui/icons-material/CreditScoreOutlined';
 import { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react';
 import { dbOrders } from '../../database';
 import { IOrder } from '../../interfaces';
+import { PayPalButtons } from '@paypal/react-paypal-js';
+
 
 interface Props {
     order: IOrder;
@@ -88,7 +89,26 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                                             />
                                         )
                                         : (
-                                            <h1>Pagar</h1>
+                                            <PayPalButtons
+                                                createOrder={(data, actions) => {
+                                                    return actions.order.create({
+                                                        purchase_units: [
+                                                            {
+                                                                amount: {
+                                                                    value: "1.99",
+                                                                },
+                                                            },
+                                                        ],
+                                                    });
+                                                }}
+                                                
+                                                onApprove={(data, actions) => {
+                                                    return actions.order.capture().then((details) => {
+                                                        const name = details.payer.name.given_name;
+                                                        alert(`Transaction completed by ${name}`);
+                                                    });
+                                                }}
+                                            />
                                         )
                                 }
 

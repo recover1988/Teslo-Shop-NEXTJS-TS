@@ -4,10 +4,12 @@ import { SWRConfig } from 'swr'
 import { UIProvider, CartProvider, AuthProvider } from '../context'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from "next-auth/react"
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider >
+      <PayPalScriptProvider options={{'client-id':process.env.NEXT_PUBLIC_PAYPAL_CLIENT || '' }}>
       <SWRConfig
         value={{
           // refreshInterval: 3000, para que se reacrgue la consulta(refrescar)
@@ -25,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </CartProvider>
         </AuthProvider>
       </SWRConfig>
+      </PayPalScriptProvider>
     </SessionProvider>
   )
 }
