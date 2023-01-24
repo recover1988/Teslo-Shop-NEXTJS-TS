@@ -56,8 +56,8 @@ const getPaypalBearerToken = async (): Promise<string | null> => {
 
 const payOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
-// TODO: validar session del usuario
-//TODO: validar mongoId
+    // TODO: validar session del usuario
+    // TODO: validar mongoId
 
     const paypalBearerToken = await getPaypalBearerToken();
 
@@ -92,7 +92,11 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     dbOrder.transactionId = transactionId;
     dbOrder.isPaid = true;
 
-    await dbOrder.save()
+    await dbOrder.save();
+
+    // TODO: enviar correo con la actualizacion del pago
+    // TODO: habilitar el recurso si es online
+
     await db.disconnect()
 
 
