@@ -8,6 +8,7 @@ import LoginOutlined from "@mui/icons-material/LoginOutlined"
 import MaleOutlined from "@mui/icons-material/MaleOutlined"
 import SearchOutlined from "@mui/icons-material/SearchOutlined"
 import VpnKeyOutlined from "@mui/icons-material/VpnKeyOutlined"
+import DashboardOutlined from '@mui/icons-material/DashboardOutlined';
 
 import { AuthContext, UIContext } from "../../context";
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
@@ -149,12 +150,23 @@ export const SideMenu = () => {
                             ? (<>
                                 <Divider />
                                 <ListSubheader>Admin Panel</ListSubheader>
+
+                                <ListItemButton
+                                    onClick={() => navigateTo('/admin/')}
+                                >
+                                    <ListItemIcon>
+                                        <DashboardOutlined />
+                                    </ListItemIcon>
+                                    <ListItemText primary={'Dashboard'} />
+                                </ListItemButton>
+
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <CategoryOutlined />
                                     </ListItemIcon>
                                     <ListItemText primary={'Productos'} />
                                 </ListItemButton>
+
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <ConfirmationNumberOutlined />
