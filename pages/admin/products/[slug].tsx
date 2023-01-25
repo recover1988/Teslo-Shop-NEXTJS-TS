@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import { AdminLayout } from '../../../components/layouts'
 import { IProduct, ISize, IType } from '../../../interfaces';
@@ -37,6 +37,8 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
 
+    const [newTagValue, setNewTagValue] = useState('')
+
     const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } = useForm<FormData>({
         defaultValues: product
     })
@@ -67,11 +69,24 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         setValue('sizes', [...currentSizes, size], { shouldValidate: true })
     }
 
+    const onNewTag = () => {
+        const newTag = newTagValue.trim().toLocaleLowerCase();
+        setNewTagValue('');
+        const currentTags = getValues('tags');
 
+        if (currentTags.includes(newTag)) {
+            return;
+        }
+        currentTags.push(newTag);
+        // setValue('tags')
+    }
 
     const onDeleteTag = (tag: string) => {
-
+        const updatedTags = getValues('tags').filter(t => t !== tag);
+        setValue('tags', updatedTags, { shouldValidate: true })
     }
+
+
     const onSubmit = (form: FormData) => {
 
     }
@@ -231,6 +246,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                             fullWidth
                             sx={{ mb: 1 }}
                             helperText="Presiona [spacebar] para agregar"
+                            value={newTagValue}
+                            onChange={({ target }) => setNewTagValue(target.value)}
+                            onKeyUp={({ code }) => code === 'Space' ? onNewTag() : undefined}
                         />
 
                         <Box sx={{
@@ -242,7 +260,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                         }}
                             component="ul">
                             {
-                                product.tags.map((tag) => {
+                                getValues('tags').map((tag) => {
 
                                     return (
                                         <Chip
