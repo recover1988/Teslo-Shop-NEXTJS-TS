@@ -70,6 +70,7 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
     return (
         <ShopLayout title={'Historial de Ordenes'} pageDescription={'Historial de ordenes del Cliente'} >
             <Typography variant='h1' component='h1' >Historial de Ordenes</Typography>
+
             <Grid container className='fadeIn'>
                 <Grid item xs={12} sx={{ height: 650, width: '100%' }} >
                     <DataGrid
@@ -81,6 +82,7 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
 
                 </Grid>
             </Grid>
+            
         </ShopLayout>
     )
 }
