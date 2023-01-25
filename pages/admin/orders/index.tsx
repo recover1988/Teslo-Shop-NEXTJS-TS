@@ -1,11 +1,11 @@
 import React from 'react'
-import { AdminLayout } from '../../components/layouts/AdminLayout';
+import { AdminLayout } from '../../../components/layouts/AdminLayout';
 import ConfirmationNumberOutlined from '@mui/icons-material/ConfirmationNumberOutlined';
 import { Chip, Grid } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid/models';
 import useSWR from 'swr';
-import { IOrder, IUser } from '../../interfaces';
+import { IOrder, IUser } from '../../../interfaces';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'Orden ID', width: 250 },
