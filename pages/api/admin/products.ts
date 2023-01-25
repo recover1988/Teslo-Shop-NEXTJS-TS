@@ -3,6 +3,9 @@ import { IProduct } from '../../../interfaces';
 import { db } from '../../../database';
 import { Product } from '../../../models';
 import { isValidObjectId } from 'mongoose';
+// linkear con la cuenta de cloudinary
+import { v2 as cloudinary } from 'cloudinary'
+cloudinary.config(process.env.CLOUDINARY_URL || '');
 
 type Data =
     | { message: string }
@@ -57,6 +60,13 @@ const updateProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
             return res.status(400).json({ message: 'No existe un producto con ese ID' })
         };
         // TODO: eliminar fotos en Cloudinary
+        product.images.forEach(async (image) => {
+            if (!images.includes(image)) {
+                //borrar de cloudinary
+                const [fileId, extension] = image.substring(image.lastIndexOf('/') + 1).split('.');
+                await cloudinary.uploader.destroy(fileId)
+            }
+        })
         await product.updateOne(req.body)
         await db.disconnect();
         return res.status(200).json(product)
