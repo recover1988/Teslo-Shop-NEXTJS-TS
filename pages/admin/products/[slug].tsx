@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import { AdminLayout } from '../../../components/layouts'
 import { IProduct, ISize, IType } from '../../../interfaces';
@@ -40,7 +40,7 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
     const router = useRouter();
-
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [newTagValue, setNewTagValue] = useState('');
     const [isSaving, setIsSaving] = useState(false)
 
@@ -91,6 +91,23 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         setValue('tags', updatedTags, { shouldValidate: true })
     }
 
+
+    const onFilesSelected = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        if (!target.files || target.files.length === 0) {
+            return
+        }
+
+
+        try {
+            for (const file of target.files) {
+                const formData = new FormData();
+                console.log(file)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
 
     const onSubmit = async (form: FormData) => {
         if (form.images.length <= 2) return alert('minimo 2 imagenes');
@@ -308,9 +325,19 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                                 fullWidth
                                 startIcon={<UploadOutlined />}
                                 sx={{ mb: 3 }}
+                                onClick={() => fileInputRef.current?.click()}
                             >
                                 Cargar imagen
                             </Button>
+
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                multiple
+                                accept='image/png, image/gif, image/jpeg'
+                                style={{ display: 'none' }}
+                                onChange={onFilesSelected}
+                            />
 
                             <Chip
                                 label="Es necesario al 2 imagenes"
