@@ -2,10 +2,11 @@ import React from 'react'
 import { AdminLayout } from '../../components/layouts/AdminLayout';
 import PeopleOutline from '@mui/icons-material/PeopleOutline';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid/models';
-import { Chip, Grid, Link, Typography } from '@mui/material';
+import { Chip, Grid, Link, MenuItem, Select, Typography } from '@mui/material';
 import { DataGrid, } from '@mui/x-data-grid';
 import useSWR from 'swr';
 import { IUser } from '../../interfaces';
+import { tesloApi } from '../../api';
 
 // los datos se ponen dentro de la funcion para cambiar los estados
 
@@ -16,10 +17,38 @@ const UsersPage = () => {
 
     if (!data && !error) return <></>;
 
+    const onRoleUpdated = async (userId: string, newRole: string) => {
+        try {
+            await tesloApi.put('/admin/users', { userId, role: newRole })
+        } catch (error) {
+            console.log(error)
+            alert('No se pudo actualizar el role del usuario')
+        }
+    }
+
     const columns: GridColDef[] = [
         { field: 'email', headerName: 'Correo', width: 250 },
         { field: 'name', headerName: 'Nombre Completo', width: 300 },
-        { field: 'role', headerName: 'Rol', width: 300 },
+        {
+            field: 'role',
+            headerName: 'Rol',
+            width: 300,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Select
+                        value={row.role}
+                        label='Rol'
+                        onChange={(event) => onRoleUpdated(row.id, event.target.value)}
+                        sx={{ widht: 300 }}
+                    >
+                        <MenuItem value='admin'>Admin</MenuItem>
+                        <MenuItem value='client'>Client</MenuItem>
+                        <MenuItem value='super-user'>Super-User</MenuItem>
+                        <MenuItem value='SEO'>SEO</MenuItem>
+                    </Select>
+                )
+            }
+        },
     ]
     const rows = data!.map(user => ({
         id: user._id,
