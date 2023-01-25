@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AdminLayout } from '../../components/layouts/AdminLayout';
 import PeopleOutline from '@mui/icons-material/PeopleOutline';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid/models';
@@ -12,15 +12,34 @@ import { tesloApi } from '../../api';
 
 const UsersPage = () => {
 
-
     const { data, error } = useSWR<IUser[]>('/api/admi/users');
+
+    const [users, setUsers] = useState<IUser[]>([])
+
+
+    useEffect(() => {
+        if (data) {
+            setUsers(data)
+        }
+    }, [data])
+
+
 
     if (!data && !error) return <></>;
 
     const onRoleUpdated = async (userId: string, newRole: string) => {
+
+        const previosUsers = users.map(user => ({ ...user }));
+        const updatedUsers = users.map(user => ({
+            ...user,
+            role: userId === user._id ? newRole : user.role
+        }));
+
+        setUsers(updatedUsers as IUser[])
         try {
             await tesloApi.put('/admin/users', { userId, role: newRole })
         } catch (error) {
+            setUsers(previosUsers)
             console.log(error)
             alert('No se pudo actualizar el role del usuario')
         }
@@ -50,7 +69,7 @@ const UsersPage = () => {
             }
         },
     ]
-    const rows = data!.map(user => ({
+    const rows = users!.map(user => ({
         id: user._id,
         email: user.email,
         name: user.name,
