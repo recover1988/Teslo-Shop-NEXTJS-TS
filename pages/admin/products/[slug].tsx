@@ -9,6 +9,9 @@ import UploadOutlined from '@mui/icons-material/UploadOutlined';
 import { dbProducts } from '../../../database';
 import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, ListItem, Paper, Radio, RadioGroup, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import { tesloApi } from '../../../api';
+import { Product } from '../../../models';
+import { useRouter } from 'next/router';
 
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats']
@@ -36,8 +39,10 @@ interface Props {
 }
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
+    const router = useRouter();
 
-    const [newTagValue, setNewTagValue] = useState('')
+    const [newTagValue, setNewTagValue] = useState('');
+    const [isSaving, setIsSaving] = useState(false)
 
     const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } = useForm<FormData>({
         defaultValues: product
@@ -87,8 +92,26 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     }
 
 
-    const onSubmit = (form: FormData) => {
-
+    const onSubmit = async (form: FormData) => {
+        if (form.images.length <= 2) return alert('minimo 2 imagenes');
+        setIsSaving(true); // evito doble poste
+        try {
+            const { data } = await tesloApi({
+                url: '/admin/products',
+                method: form._id ? 'PUT' : 'POST', // si tenemos un _id, entonces actualizar, sino crear
+                data: form
+            })
+            console.log(data)
+            if (!form._id) {
+                //TODO: recargar el navegador
+                router.replace(`/admin/products/${form.slug}`)
+            } else {
+                setIsSaving(false)
+            }
+        } catch (error) {
+            console.log(error)
+            setIsSaving(false)
+        }
     }
 
     return (
@@ -104,6 +127,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                         startIcon={<SaveOutlined />}
                         sx={{ width: '150px' }}
                         type="submit"
+                        disabled={isSaving}
                     >
                         Guardar
                     </Button>
@@ -334,7 +358,18 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
     const { slug = '' } = query;
 
-    const product = await dbProducts.getProductBySlug(slug.toString());
+    let product: IProduct | null;
+    if (slug === 'new') {
+        //crear producto
+        const tempProduct = JSON.parse(JSON.stringify(new Product()));
+        delete tempProduct._id;
+        tempProduct.images = ['im1.jpg', 'im2.jpg'];
+        product = tempProduct
+    } else {
+        product = await dbProducts.getProductBySlug(slug.toString());
+    }
+
+
 
     if (!product) {
         return {
