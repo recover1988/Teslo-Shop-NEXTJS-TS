@@ -4,14 +4,16 @@ import { IProduct } from '../interfaces';
 
 export const getProductBySlug = async (slug: string): Promise<IProduct | null> => {
     await db.connect()
-
     const product = await Product.findOne({ slug }).lean()
-
     await db.disconnect()
+
     if (!product) {
         return null
     }
     return JSON.parse(JSON.stringify(product)) // para que sea serializado como un string el _id
+
+
+    //TODO: procesar imagenes cuando subamos al server
 }
 
 export interface ProductSlug {
