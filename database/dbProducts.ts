@@ -10,10 +10,14 @@ export const getProductBySlug = async (slug: string): Promise<IProduct | null> =
     if (!product) {
         return null
     }
+
+    // regresa las images del filesstem con URL localhost o con la de cloudinary
+
+    product.images = product.images.map(image => {
+        return image.includes('http') ? image : `${process.env.HOST_NAME}product/${image}`
+    })
+
     return JSON.parse(JSON.stringify(product)) // para que sea serializado como un string el _id
-
-
-    //TODO: procesar imagenes cuando subamos al server
 }
 
 export interface ProductSlug {
@@ -39,7 +43,14 @@ export const getProductsByTerm = async (term: string): Promise<IProduct[]> => {
         .lean()
 
     await db.disconnect()
-    return products
+    const updateProducts = products.map(product => {
+        product.images = product.images.map(image => {
+            return image.includes('http') ? image : `${process.env.HOST_NAME}product/${image}`
+        });
+        return product;
+    })
+
+    return updateProducts
 }
 
 export const getAllProducts = async (): Promise<IProduct[]> => {
@@ -47,5 +58,12 @@ export const getAllProducts = async (): Promise<IProduct[]> => {
     const products = await Product.find().lean()
     await db.disconnect()
 
-    return JSON.parse(JSON.stringify(products))
+    const updateProducts = products.map(product => {
+        product.images = product.images.map(image => {
+            return image.includes('http') ? image : `${process.env.HOST_NAME}product/${image}`
+        });
+        return product;
+    })
+
+    return JSON.parse(JSON.stringify(updateProducts))
 }

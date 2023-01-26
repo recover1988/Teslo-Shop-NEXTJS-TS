@@ -21,8 +21,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
 async function getProductBySlug(req: NextApiRequest, res: NextApiResponse<Data>) {
 
-
-
     await db.connect()
 
     const { slug } = req.query
@@ -32,5 +30,12 @@ async function getProductBySlug(req: NextApiRequest, res: NextApiResponse<Data>)
     await db.disconnect()
 
     if (!product) return res.status(404).json({ message: 'Producto no encontrado' })
-    else return res.status(200).json(product)
+
+
+
+    product.images = product.images.map(image => {
+        return image.includes('http') ? image : `${process.env.HOST_NAME}products/${image}`
+    });
+
+    return res.status(200).json(product)
 }
