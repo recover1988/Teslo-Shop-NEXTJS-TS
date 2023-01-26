@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
 
     useEffect(() => {
-
         if (status === 'authenticated') {
             dispatch({ type: '[Auth] - Login', payload: data?.user as IUser })
         }

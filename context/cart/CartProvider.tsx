@@ -1,11 +1,11 @@
 import { FC, useEffect, useReducer } from 'react';
 import Cookie from 'js-cookie';
+import axios from 'axios';
 
 
 import { ICartProduct, IOrder, ShippingAddress } from '../../interfaces';
 import { CartContext, cartReducer } from './';
 import { tesloApi } from '../../api';
-import axios from 'axios';
 
 export interface CartState {
     isLoaded: boolean;
@@ -17,7 +17,6 @@ export interface CartState {
 
     shippingAddress?: ShippingAddress;
 }
-
 
 
 
@@ -36,7 +35,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
-    // Carga los productos desde la Cookie
+    // Efecto
     useEffect(() => {
         try {
             const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!) : []
@@ -46,8 +45,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, []);
 
-    // Se cargan los datos de Address desde la Cookie
+
     useEffect(() => {
+
         if (Cookie.get('firstName')) {
             const shippingAddress = {
                 firstName: Cookie.get('firstName') || '',
@@ -66,14 +66,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
 
 
-    // Crea la cookie Cart y sube los datos
+
     useEffect(() => {
         if (state.cart.length > 0) {
-            Cookie.set('cart', JSON.stringify(state.cart))
+            Cookie.set('cart', JSON.stringify(state.cart));
         }
+
     }, [state.cart]);
 
-    // Actualiza el numberOfItems, Subtotal,Taxrate del summary
+
     useEffect(() => {
 
         const numberOfItems = state.cart.reduce((prev, current) => current.quantity + prev, 0);
@@ -142,11 +143,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         dispatch({ type: '[Cart] - Update Address', payload: address });
     }
 
-    const createOrder = async (): Promise<{ hasError: boolean; message: string }> => {
+
+    const createOrder = async (): Promise<{ hasError: boolean; message: string; }> => {
 
         if (!state.shippingAddress) {
-            throw new Error('No hay direccion de entrega')
+            throw new Error('No hay dirección de entrega');
         }
+
         const body: IOrder = {
             orderItems: state.cart.map(p => ({
                 ...p,
@@ -157,18 +160,21 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             subTotal: state.subTotal,
             tax: state.tax,
             total: state.total,
-            isPaid: false,
+            isPaid: false
         }
 
 
         try {
-            const { data } = await tesloApi.post<IOrder>('/orders', body)
-            // Todo: dispatch
-            dispatch({ type: '[Cart] - Order complete' })
+
+            const { data } = await tesloApi.post<IOrder>('/orders', body);
+
+            dispatch({ type: '[Cart] - Order complete' });
+
             return {
                 hasError: false,
-                message: data._id! // confia en mi siempre viene !
+                message: data._id!
             }
+
 
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -177,15 +183,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
                     message: error.response?.data.message
                 }
             }
-
             return {
                 hasError: true,
                 message: 'Error no controlado, hable con el administrador'
             }
         }
 
-
     }
+
 
     return (
         <CartContext.Provider value={{
@@ -197,7 +202,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             updateCartQuantity,
             updateAddress,
 
-            //Orders
+            // Orders
             createOrder,
         }}>
             {children}

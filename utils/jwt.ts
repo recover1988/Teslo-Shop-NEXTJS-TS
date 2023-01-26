@@ -50,4 +50,3 @@ export const isValidToken = ( token: string ):Promise<string> => {
     })
 
 }
-
