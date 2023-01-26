@@ -21,7 +21,7 @@ export const getProductBySlug = async (slug: string): Promise<IProduct | null> =
     return JSON.parse(JSON.stringify(product));
 }
 
-interface ProductSlug {
+export interface ProductSlug {
     slug: string;
 }
 
