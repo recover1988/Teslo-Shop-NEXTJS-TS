@@ -11,7 +11,7 @@ const mongoConnection = {
 }
 
 export const connect = async () => {
-    mongoose.set('strictQuery', true)
+    mongoose.set('strictQuery', false);
     if (mongoConnection.isConnected) {
         console.log('Ya estabamos conectados');
         return;
@@ -29,7 +29,6 @@ export const connect = async () => {
     }
 
     await mongoose.connect(process.env.MONGO_URL || '');
-
     mongoConnection.isConnected = 1;
     console.log('Conectado a MongoDB:', process.env.MONGO_URL);
 }

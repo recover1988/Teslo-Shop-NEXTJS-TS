@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     await Product.insertMany( seedDatabase.initialData.products );
 
 
-    await Order.deleteMany();
+    // await Order.deleteMany();
 
     await db.disconnect();
 
