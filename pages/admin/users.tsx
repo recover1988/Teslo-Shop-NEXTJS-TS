@@ -3,7 +3,7 @@ import { AdminLayout } from '../../components/layouts/AdminLayout';
 import PeopleOutline from '@mui/icons-material/PeopleOutline';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid/models';
 import { Chip, Grid, Link, MenuItem, Select, Typography } from '@mui/material';
-import { DataGrid, } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import useSWR from 'swr';
 import { IUser } from '../../interfaces';
 import { tesloApi } from '../../api';

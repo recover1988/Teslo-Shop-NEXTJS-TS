@@ -2,7 +2,6 @@ import { AuthContext } from '../../context';
 import { AuthLayout } from '../../components/layouts'
 import { Box, Grid, Typography, TextField, Button, Link, Chip } from '@mui/material';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
-import { tesloApi } from '../../api';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
