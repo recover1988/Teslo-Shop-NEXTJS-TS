@@ -128,7 +128,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             })
             console.log(data)
             if (!form._id) {
-                //TODO: recargar el navegador
+                //recargar el navegador
                 router.replace(`/admin/products/${form.slug}`)
             } else {
                 setIsSaving(false)

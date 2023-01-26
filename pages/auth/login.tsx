@@ -44,7 +44,6 @@ const LoginPage = () => {
         //     setTimeout(() => setShowError(false), 3000); // se muestra en error CHIP y 3 segundo despues se oculta
         //     return
         // }
-        // // TODO: volver a la pantalla anterior
         // const destination = router.query.p?.toString() || '/'; // obtenemos el url
         // router.replace(destination)
         await signIn('credentials', { email, password }) // en esta funcion solo estan permitidos los provider que se definieron en la pagina de [...auth].ts

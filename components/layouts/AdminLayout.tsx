@@ -38,7 +38,6 @@ export const AdminLayout: FC<Props> = ({ children, title, subTitle, icon }) => {
                     {children}
                 </Box>
             </main>
-            {/* TODO: Footer */}
 
         </>
     )

@@ -41,7 +41,7 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
     if (name.length < 2) {
         return res.status(400).json({ message: 'El nombre debe de ser de 2 carateres' })
     }
-    //TODO: validar email
+    //validar email
     if (!validations.isValidEmail(email)) {
         return res.status(400).json({ message: 'El correo no tiene el formato de correo' })
     }

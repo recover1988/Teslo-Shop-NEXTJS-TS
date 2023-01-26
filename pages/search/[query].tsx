@@ -57,14 +57,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
     let products = await dbProducts.getProductsByTerm(query)
 
-    const foundProducts = products.length > 0
+    const foundProducts = products.length > 0;
 
-    //TODO: retornar otros productos
     if (!foundProducts) {
         // aca se puede cambiar products y buscar por alguna cosa que el usuario tenga guardado en la cookie
         products = await dbProducts.getAllProducts()
     }
-
 
     return {
         props: {

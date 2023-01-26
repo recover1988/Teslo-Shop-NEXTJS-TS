@@ -36,7 +36,6 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     await db.disconnect();
 
-    // TODO: actualizar imagenes
     const updateProducts = products.map(product => {
         product.images = product.images.map(image => {
             return image.includes('http') ? image : `${process.env.HOST_NAME}products/${image}`
@@ -57,7 +56,7 @@ const updateProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
         return res.status(400).json({ message: 'Es necesario al menos 2 imagenes' })
     }
 
-    //TODO posiblemente tendremos un localhost:3000/products/asdasd.jpg
+    //posiblemente tendremos un localhost:3000/products/asdasd.jpg
     try {
         await db.connect();
         const product = await Product.findById(_id);
@@ -65,7 +64,7 @@ const updateProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
             await db.disconnect();
             return res.status(400).json({ message: 'No existe un producto con ese ID' })
         };
-        // TODO: eliminar fotos en Cloudinary
+        // eliminar fotos en Cloudinary
         product.images.forEach(async (image) => {
             if (!images.includes(image)) {
                 //borrar de cloudinary

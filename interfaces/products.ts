@@ -10,7 +10,7 @@ export interface IProduct {
     title: string;
     type: IType;
     gender: 'men' | 'women' | 'kid' | 'unisex';
-    // TODO: agregar un createdAt y updatedAt
+    //agregar un createdAt y updatedAt
     createdAt: string;
     updatedAt: string
 }
